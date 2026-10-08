@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth bg-[#050505] text-zinc-300">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KARGA İHA | Otonom Havacılık & Mühendislik</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pitchBg: '#050505',
+                        charcoalCard: '#0D0D10',
+                        charcoalBorder: '#1A1A1E',
+                        borderSubtle: 'rgba(255, 255, 255, 0.08)',
+                        tacticalZinc: '#71717A',
+                        tacticalLight: '#E4E4E7',
+                        tacticalAccent: '#D4D4D8',
+                        alertAmber: '#D97706',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Stealth scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1C1C21;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3F3F46;
+        }
+
+        /* Subtle Matte Technical Card */
+        .stealth-card {
+            background: #0D0D10;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+        .stealth-card:hover {
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+
+        /* Tactical Grid Background */
+        .stealth-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+
+        /* Editable visual indicator */
+        body.edit-mode-active [contenteditable="true"] {
+            outline: 1px dashed #D97706 !important;
+            outline-offset: 3px;
+            background-color: rgba(217, 119, 6, 0.05);
+            cursor: text;
+        }
+
+        /* Scanline Texture overlay */
+        .scanline-overlay {
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 0) 50%,
+                rgba(0, 0, 0, 0.15) 50%,
+                rgba(0, 0, 0, 0.15)
+            );
+            background-size: 100% 4px;
+        }
+    </style>
+</head>
+<body class="bg-pitchBg text-zinc-300 font-sans antialiased selection:bg-zinc-800 selection:text-white relative overflow-x-hidden">
+
+    <!-- TOP SYSTEM STATUS BAR -->
+    <div class="w-full bg-[#08080A] border-b border-borderSubtle py-1.5 px-4 text-[11px] font-mono text-zinc-500 flex items-center justify-between z-50 relative">
+        <div class="flex items-center gap-4">
+            <span class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span class="text-zinc-400">SYS_STATUS:</span> OPERATIONAL
+            </span>
+            <span class="hidden sm:inline-block text-zinc-700">|</span>
+            <span class="hidden sm:inline-block">LOCATION: 41.0082° N, 28.9784° E</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span>PROJECT: KARGA_UAV_2026</span>
+            <span class="text-zinc-600 font-semibold">[CONFIDENTIAL / INTERNAL]</span>
+        </div>
+    </div>
+
+    <!-- MINIMALIST HEADER -->
+    <header class="sticky top-0 z-40 bg-[#050505]/90 backdrop-blur-md border-b border-borderSubtle">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- Logo -->
+            <a href="#hero" class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-zinc-900 border border-zinc-700 flex items-center justify-center text-zinc-200">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2L3 9L6 12L12 7L18 12L21 9L12 2Z"/>
+                        <path d="M12 9L5 15L8 21L12 17L16 21L19 15L12 9Z" opacity="0.6"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-mono font-bold text-sm tracking-wider text-white">KARGA<span class="text-zinc-500">_İHA</span></span>
+                    <span class="text-[9px] font-mono text-zinc-600 uppercase tracking-widest">Autonomous Flight Systems</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-wider text-zinc-400">
+                <a href="#vision" class="hover:text-white transition-colors">// Vizyon</a>
+                <a href="#platforms" class="hover:text-white transition-colors">// Platformlar</a>
+                <a href="#engineering" class="hover:text-white transition-colors">// Mühendislik</a>
+                <a href="#roadmap" class="hover:text-white transition-colors">// Takvim</a>
+                <a href="#sponsors" class="hover:text-white transition-colors">// Destekçiler</a>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSponsorshipModal()" class="px-4 py-2 text-xs font-mono uppercase tracking-wider text-zinc-200 bg-zinc-900 border border-zinc-700 hover:bg-zinc-800 transition-colors">
+                    Sponsorluk Dökümanı
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative py-24 md:py-32 border-b border-borderSubtle stealth-grid overflow-hidden">
+        <canvas id="hero-grid-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-20"></canvas>
+        <div class="scanline-overlay absolute inset-0 pointer-events-none opacity-30"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-left">
+            
+            <!-- Metadata tag -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-zinc-900/80 border border-zinc-800 mb-8 font-mono text-xs text-zinc-400">
+                <span class="w-1.5 h-1.5 bg-zinc-400"></span>
+                <span editable-text>KARGA AEROSPACE LABORATORY & RESEARCH TEAM</span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-4xl sm:text-6xl font-display font-bold text-white tracking-tight leading-tight uppercase mb-6" editable-text>
+                SESSİZ, HASSAS VE OTONOM <br>
+                <span class="text-zinc-500">MİLLİ İHA TEKNOLOJİSİ</span>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="max-w-2xl text-sm sm:text-base text-zinc-400 font-mono font-light leading-relaxed mb-10" editable-text>
+                Gelişmiş aerodinamik optimizasyon, otonom seyrüsefer algoritmaları ve kompozit yapı teknolojileri ile yeni nesil insansız sistemler geliştiriyoruz.
+            </p>
+
+            <!-- CTAs -->
+            <div class="flex flex-wrap items-center gap-4">
+                <a href="#platforms" class="px-6 py-3 bg-zinc-100 text-black font-mono font-medium text-xs uppercase tracking-wider hover:bg-zinc-300 transition-colors">
+                    Platformları İncele
+                </a>
+                <a href="#contact" class="px-6 py-3 bg-zinc-900 text-zinc-300 border border-zinc-800 font-mono text-xs uppercase tracking-wider hover:bg-zinc-800 transition-colors">
+                    İletişime Geç
+                </a>
+            </div>
+
+            <!-- Technical Key Metrics Grid -->
+            <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-zinc-800/80 pt-8">
+                <div>
+                    <div class="text-[10px] font-mono text-zinc-600 uppercase">FLIGHT COMPUTATION</div>
+                    <div class="text-lg font-mono font-semibold text-zinc-200 mt-1" editable-text>PX4 / ROS 2</div>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono text-zinc-600 uppercase">TELEMETRY RANGE</div>
+                    <div class="text-lg font-mono font-semibold text-zinc-200 mt-1" editable-text>15+ KM LINK</div>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono text-zinc-600 uppercase">AIRFRAME DESIGN</div>
+                    <div class="text-lg font-mono font-semibold text-zinc-200 mt-1" editable-text>CARBON COMPOSITE</div>
+                </div>
+                <div>
+                    <div class="text-[10px] font-mono text-zinc-600 uppercase">MISSION TARGET</div>
+                    <div class="text-lg font-mono font-semibold text-zinc-200 mt-1" editable-text>TEKNOFEST 2026</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ENGINEERING VISION / ABOUT -->
+    <section id="vision" class="py-20 border-b border-borderSubtle bg-[#08080A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="md:col-span-1">
+                    <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">// 01. MÜHENDİSLİK MİSYONU</span>
+                    <h2 class="text-2xl font-bold text-white mt-2 uppercase tracking-wide" editable-text>Disiplinli Ar-Ge, Sıfır Hata Toleransı</h2>
+                </div>
+
+                <div class="md:col-span-2 text-sm text-zinc-400 space-y-4 font-mono leading-relaxed">
+                    <p editable-text>
+                        Karga İHA, üniversite bünyesinde kurulan ve havacılık standartlarında mühendislik yaklaşımını benimseyen bağımsız bir araştırma takımıdır. Amacımız, prototip aşamasından nihai uçuş testlerine kadar yerli ve otonom çözümler sunmaktır.
+                    </p>
+                    <p editable-text>
+                        Aerodinamik simülasyonlar (CFD), yapay zeka tabanlı görüntü işleme ve hassas faydalı yük mekanizmaları kendi bünyemizde geliştirilmektedir.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 3 Core Engineering Pillars -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+                
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-500 mb-2">SYS_MOD // 01</div>
+                    <h3 class="text-base font-bold text-white uppercase mb-2" editable-text>Otonom Görev Sistemleri</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        GPS bağımsız seyrüsefer, YOLOv8 tabanlı hedef tespit ve otonom faydalı yük bırakma algoritmaları.
+                    </p>
+                </div>
+
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-500 mb-2">SYS_MOD // 02</div>
+                    <h3 class="text-base font-bold text-white uppercase mb-2" editable-text>Hafif & Dayanıklı Yapı</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        Karbon fiber sandviç panel teknolojisi ve optimize edilmiş kanat profili ile yüksek taşıma kapasitesi.
+                    </p>
+                </div>
+
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-500 mb-2">SYS_MOD // 03</div>
+                    <h3 class="text-base font-bold text-white uppercase mb-2" editable-text>Özgün Aviyonik Mimarisi</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        Özel tasarım PCB telemetri kartları, yedekli güç dağıtım modülleri ve emniyet protokolleri.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- UAV PLATFORM SPECS -->
+    <section id="platforms" class="py-20 border-b border-borderSubtle">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">// 02. FLOTİLAVE KONSEPTLER</span>
+                    <h2 class="text-2xl font-bold text-white mt-1 uppercase" editable-text>İHA Platform Özellikleri</h2>
+                </div>
+                <div class="text-xs font-mono text-zinc-500 mt-2 md:mt-0">
+                    CLASSIFICATION: DEFENSE_TECH_PROTOTYPE
+                </div>
+            </div>
+
+            <!-- Platforms Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <!-- Platform 1: KARGA-01 Fixed Wing -->
+                <div class="stealth-card p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono text-zinc-500">DESIGNATION</span>
+                                <h3 class="text-xl font-bold font-mono text-white" editable-text>KARGA-01 / SABİT KANAT</h3>
+                            </div>
+                            <span class="px-2.5 py-1 text-[10px] font-mono bg-zinc-900 border border-zinc-700 text-zinc-300">
+                                PHASE: AR-GE
+                            </span>
+                        </div>
+
+                        <p class="text-xs font-mono text-zinc-400 mb-6 leading-relaxed" editable-text>
+                            Uzun menzilli keşif, otonom alan taraması ve yüksek hızlı veri aktarımı için tasarlanmış sabit kanatlı insansız hava aracı.
+                        </p>
+
+                        <!-- Spec Table -->
+                        <div class="space-y-2 font-mono text-xs mb-8">
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">KANAT AÇIKLIĞI</span>
+                                <span class="text-zinc-200" editable-text>1850 MM</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">AZAMİ KALKIŞ AĞIRLIĞI (MTOW)</span>
+                                <span class="text-zinc-200" editable-text>4.8 KG</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">HAVADA KALIŞ SÜRESİ</span>
+                                <span class="text-zinc-200" editable-text>45+ DAKİKA</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">SEYİR HIZI</span>
+                                <span class="text-zinc-200" editable-text>72 KM/S</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">MALZEME MİMARİSİ</span>
+                                <span class="text-zinc-200" editable-text>KARBON FIBER / EPOKSİ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="openSpecModal('KARGA-01 Sabit Kanat', 'Otonom keşif ve devriye görevleri için optimize edilmiş sabit kanat konsepti.', '1850 mm', '4.8 kg', '45 Min', '72 km/h')" class="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-mono uppercase tracking-wider transition-colors text-center">
+                        Teknik Detayları Göster
+                    </button>
+                </div>
+
+                <!-- Platform 2: KARGA-VTOL -->
+                <div class="stealth-card p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6">
+                            <div>
+                                <span class="text-[10px] font-mono text-zinc-500">DESIGNATION</span>
+                                <h3 class="text-xl font-bold font-mono text-white" editable-text>KARGA-VTOL / HİBRİT</h3>
+                            </div>
+                            <span class="px-2.5 py-1 text-[10px] font-mono bg-zinc-900 border border-zinc-700 text-zinc-300">
+                                PHASE: TASARIM
+                            </span>
+                        </div>
+
+                        <p class="text-xs font-mono text-zinc-400 mb-6 leading-relaxed" editable-text>
+                            Pist ihtiyacını ortadan kaldıran dikey kalkış-iniş (VTOL) ve sabit kanat seyir modlarını birleştiren hibrit konsept platform.
+                        </p>
+
+                        <!-- Spec Table -->
+                        <div class="space-y-2 font-mono text-xs mb-8">
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">KONFİGÜRASYON</span>
+                                <span class="text-zinc-200" editable-text>QUAD-TILT ROTOR</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">FAYDALI YÜK KAPASİTESİ</span>
+                                <span class="text-zinc-200" editable-text>750 GRAM</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">HAVADA KALIŞ SÜRESİ</span>
+                                <span class="text-zinc-200" editable-text>60+ DAKİKA</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">KONTROL SİSTEMİ</span>
+                                <span class="text-zinc-200" editable-text>PX4 AUTOPILOT / CUSTOM MESH</span>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-zinc-900">
+                                <span class="text-zinc-500">HEDEFLENEN YARIŞMA</span>
+                                <span class="text-zinc-200" editable-text>TEKNOFEST İHA</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="openSpecModal('KARGA-VTOL Hibrit', 'Dikey kalkış ve iniş yapabilen modüler seyrüsefer platformu.', '2100 mm', '6.2 kg', '60 Min', '85 km/h')" class="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-mono uppercase tracking-wider transition-colors text-center">
+                        Teknik Detayları Göster
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SUB-TEAMS / DEPARTMENTS -->
+    <section id="engineering" class="py-20 border-b border-borderSubtle bg-[#08080A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="mb-12">
+                <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">// 03. ORGANİZASYON</span>
+                <h2 class="text-2xl font-bold text-white mt-1 uppercase" editable-text>Mühendislik Departmanları</h2>
+            </div>
+
+            <!-- Dept Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                
+                <!-- Dept 1 -->
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-600 mb-3">DEPT_01</div>
+                    <h3 class="text-sm font-bold text-white uppercase mb-2" editable-text>Aerodinamik & Mekanik</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        Gövde tasarımları, Ansys CFD akış analizleri, kompozit malzeme kalıplama ve yapısal mukavemet testleri.
+                    </p>
+                </div>
+
+                <!-- Dept 2 -->
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-600 mb-3">DEPT_02</div>
+                    <h3 class="text-sm font-bold text-white uppercase mb-2" editable-text>Aviyonik & Donanım</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        Güç yönetimi, devre kartı (PCB) tasarımı, telemetri modülleri ve sensör entegrasyon süreçleri.
+                    </p>
+                </div>
+
+                <!-- Dept 3 -->
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-600 mb-3">DEPT_03</div>
+                    <h3 class="text-sm font-bold text-white uppercase mb-2" editable-text>Yazılım & Yapay Zeka</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        ROS 2 mimarisi, görüntü işleme tabanlı otonom kilitlenme ve otonom rota planlama algoritmaları.
+                    </p>
+                </div>
+
+                <!-- Dept 4 -->
+                <div class="stealth-card p-6">
+                    <div class="text-xs font-mono text-zinc-600 mb-3">DEPT_04</div>
+                    <h3 class="text-sm font-bold text-white uppercase mb-2" editable-text>Operasyon & Kurumsal</h3>
+                    <p class="text-xs text-zinc-400 font-mono leading-relaxed" editable-text>
+                        Sponsorluk ilişkileri, bütçe yönetimi, raporlama ve medya iletişim süreçlerinin takibi.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ROADMAP TIMELINE -->
+    <section id="roadmap" class="py-20 border-b border-borderSubtle">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="mb-12">
+                <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">// 04. SEZON TAKVİMİ</span>
+                <h2 class="text-2xl font-bold text-white mt-1 uppercase" editable-text>2026 Yol Haritası</h2>
+            </div>
+
+            <div class="space-y-4 max-w-4xl font-mono text-xs">
+                
+                <!-- Item 1 -->
+                <div class="stealth-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-zinc-500 w-24">Q4 2025</span>
+                        <span class="text-white font-bold" editable-text>Takım Kurulumu ve Kavramsal Tasarım</span>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 w-fit">
+                        TAMAMLANDI
+                    </span>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="stealth-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-zinc-500 w-24">Q1 2026</span>
+                        <span class="text-white font-bold" editable-text>Simülasyonlar ve Prototip İmalatı</span>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 bg-amber-950 text-amber-400 border border-amber-800 w-fit">
+                        SÜRÜYOR
+                    </span>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="stealth-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-zinc-500 w-24">Q2 2026</span>
+                        <span class="text-white font-bold" editable-text>Saha Uçuş Testleri ve Otonom Görevler</span>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 bg-zinc-900 text-zinc-500 border border-zinc-800 w-fit">
+                        PLANLANDI
+                    </span>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="stealth-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-zinc-500 w-24">Q3 2026</span>
+                        <span class="text-white font-bold" editable-text>TEKNOFEST Yarışma Finali</span>
+                    </div>
+                    <span class="text-[10px] px-2 py-0.5 bg-zinc-900 text-zinc-500 border border-zinc-800 w-fit">
+                        PLANLANDI
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SPONSORSHIP TIERS -->
+    <section id="sponsors" class="py-20 border-b border-borderSubtle bg-[#08080A]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">// 05. İŞ BİRLİĞİ</span>
+                <h2 class="text-2xl font-bold text-white mt-1 uppercase" editable-text>Sponsorluk Kategorileri</h2>
+                <p class="text-xs font-mono text-zinc-400 mt-3" editable-text>
+                    Milli teknoloji hamlesinde ekibimize donanım, malzeme veya finansal destek sağlayan destekçilerimize teşekkür ederiz.
+                </p>
+            </div>
+
+            <!-- Sponsor Slots -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                
+                <div class="stealth-card p-6 text-center flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase mb-2">TIER 01</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-4">PLATİN SPONSOR</h3>
+                        <p class="text-xs text-zinc-400 font-mono mb-6" editable-text>
+                            Gövde üzeri ana logo yerleşimi, tüm basın bültenlerinde ve sosyal medyada marka görünürlüğü.
+                        </p>
+                    </div>
+                    <button onclick="toggleSponsorshipModal()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-300">
+                        Sponsor Olın
+                    </button>
+                </div>
+
+                <div class="stealth-card p-6 text-center flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase mb-2">TIER 02</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-4">ALTIN SPONSOR</h3>
+                        <p class="text-xs text-zinc-400 font-mono mb-6" editable-text>
+                            Kanat üzeri logo görünürlüğü, web sitesinde ve ekip kıyafetlerinde öncelikli konumlandırma.
+                        </p>
+                    </div>
+                    <button onclick="toggleSponsorshipModal()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-300">
+                        Sponsor Olun
+                    </button>
+                </div>
+
+                <div class="stealth-card p-6 text-center flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] font-mono text-zinc-500 uppercase mb-2">TIER 03</div>
+                        <h3 class="text-base font-bold text-white font-mono mb-4">MALZEME & TEKNİK DESTEK</h3>
+                        <p class="text-xs text-zinc-400 font-mono mb-6" editable-text>
+                            Kompozit kumaş, 3D baskı filamentleri, batarya ve elektronik bileşen sağlayan teknoloji ortakları.
+                        </p>
+                    </div>
+                    <button onclick="toggleSponsorshipModal()" class="w-full py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-mono text-zinc-300">
+                        Sponsor Olun
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                <div>
+                    <span class="text-xs font-mono text-zinc-500 uppercase tracking-widest">// 06. İLETİŞİM</span>
+                    <h2 class="text-2xl font-bold text-white mt-1 uppercase" editable-text>Ekibimizle Bağlantı Kurun</h2>
+                    <p class="text-xs font-mono text-zinc-400 mt-4 leading-relaxed" editable-text>
+                        Sponsorluk, teknik iş birliği veya katılım talepleri için doğrudan iletişim formunu kullanabilir veya e-posta gönderebilirsiniz.
+                    </p>
+
+                    <div class="mt-8 space-y-4 font-mono text-xs text-zinc-400">
+                        <div>
+                            <span class="text-zinc-600 block">E-POSTA</span>
+                            <span class="text-zinc-200" editable-text>kargaiha.team@gmail.com</span>
+                        </div>
+                        <div>
+                            <span class="text-zinc-600 block">ATÖLYE ADRESİ</span>
+                            <span class="text-zinc-200" editable-text>Mühendislik Fakültesi İHA Laboratuvarı, İstanbul</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stealth-card p-6">
+                    <form onsubmit="handleForm(event)" class="space-y-4 font-mono text-xs">
+                        <div>
+                            <label class="block text-zinc-500 uppercase mb-1">İsim / Kurum *</label>
+                            <input type="text" required class="w-full bg-pitchBg border border-zinc-800 p-2.5 text-zinc-200 focus:outline-none focus:border-zinc-500">
+                        </div>
+                        <div>
+                            <label class="block text-zinc-500 uppercase mb-1">E-Posta *</label>
+                            <input type="email" required class="w-full bg-pitchBg border border-zinc-800 p-2.5 text-zinc-200 focus:outline-none focus:border-zinc-500">
+                        </div>
+                        <div>
+                            <label class="block text-zinc-500 uppercase mb-1">Mesaj *</label>
+                            <textarea rows="4" required class="w-full bg-pitchBg border border-zinc-800 p-2.5 text-zinc-200 focus:outline-none focus:border-zinc-500 resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 bg-zinc-200 hover:bg-white text-black font-bold uppercase transition-colors">
+                            Mesajı Gönder
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-8 border-t border-borderSubtle bg-[#030303] text-xs font-mono text-zinc-600">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <span>KARGA İHA © 2026 // ALL RIGHTS RESERVED</span>
+            </div>
+            <div>
+                <a href="#hero" class="hover:text-zinc-400 transition-colors">YUKARI DÖN ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SPONSORSHIP MODAL -->
+    <div id="sponsorship-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+        <div class="stealth-card max-w-lg w-full p-6 relative border-zinc-700 font-mono">
+            <button onclick="toggleSponsorshipModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white">
+                ✕
+            </button>
+            <h3 class="text-lg font-bold text-white mb-2 uppercase">Sponsorluk Bilgi Dosyası</h3>
+            <p class="text-xs text-zinc-400 mb-6">
+                2026 Sezonu Sponsorluk dosyamızı indirerek bütçe ve ekipman ihtiyaçlarımızı detaylı inceleyebilirsiniz.
+            </p>
+            <button onclick="showToast('Sponsorluk dosyası indirme başlatıldı.')" class="w-full py-2.5 bg-zinc-200 text-black font-bold text-xs uppercase hover:bg-white transition-colors">
+                PDF Dosyasını İndir
+            </button>
+        </div>
+    </div>
+
+    <!-- SPEC MODAL -->
+    <div id="spec-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+        <div class="stealth-card max-w-md w-full p-6 relative border-zinc-700 font-mono">
+            <button onclick="closeSpecModal()" class="absolute top-4 right-4 text-zinc-500 hover:text-white">✕</button>
+            <h3 id="modal-title" class="text-base font-bold text-white mb-2 uppercase">Detaylar</h3>
+            <p id="modal-desc" class="text-xs text-zinc-400 mb-4">Açıklama</p>
+            
+            <div id="modal-specs" class="space-y-2 text-xs border-t border-zinc-800 pt-4 mb-6">
+                <!-- Injected via JS -->
+            </div>
+
+            <button onclick="closeSpecModal()" class="w-full py-2 bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs">Kapat</button>
+        </div>
+    </div>
+
+    <!-- QUICK EDIT CONTROL TOOLBAR -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="edit-toggle-btn" onclick="toggleQuickEditMode()" class="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-mono uppercase tracking-wider shadow-2xl flex items-center gap-2">
+            <i class="fa-solid fa-pen text-[10px]"></i>
+            <span id="edit-btn-text">İçerik Düzenleme Modu</span>
+        </button>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="fixed top-6 right-6 z-50 hidden bg-zinc-900 border border-zinc-700 px-4 py-3 text-xs font-mono text-zinc-200 shadow-2xl">
+        <span id="toast-msg">Bildirim</span>
+    </div>
+
+    <script>
+        // Hero Background Grid Animation
+        const canvas = document.getElementById('hero-grid-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let lineY = 0;
+        function drawGridAnimation() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 1;
+
+            // Horizontal scanning line
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            ctx.beginPath();
+            ctx.moveTo(0, lineY);
+            ctx.lineTo(canvas.width, lineY);
+            ctx.stroke();
+
+            lineY = (lineY + 0.8) % canvas.height;
+            requestAnimationFrame(drawGridAnimation);
+        }
+
+        window.onload = function() {
+            drawGridAnimation();
+        }
+
+        // Quick Edit Mode
+        let isEditMode = false;
+        function toggleQuickEditMode() {
+            isEditMode = !isEditMode;
+            const editableEls = document.querySelectorAll('[editable-text]');
+            const btnText = document.getElementById('edit-btn-text');
+
+            if (isEditMode) {
+                document.body.classList.add('edit-mode-active');
+                editableEls.forEach(el => el.setAttribute('contenteditable', 'true'));
+                btnText.innerText = 'Düzenlemeyi Bitir';
+                showToast('Düzenleme Modu Aktif. Metinleri değiştirebilirsiniz.');
+            } else {
+                document.body.classList.remove('edit-mode-active');
+                editableEls.forEach(el => el.removeAttribute('contenteditable'));
+                btnText.innerText = 'İçerik Düzenleme Modu';
+                showToast('Düzenleme Modu Kapatıldı.');
+            }
+        }
+
+        function toggleSponsorshipModal() {
+            const modal = document.getElementById('sponsorship-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function openSpecModal(title, desc, wingspan, weight, endurance, speed) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-specs').innerHTML = `
+                <div class="flex justify-between"><span class="text-zinc-500">KANAT/AÇIKLIK:</span> <span class="text-white">${wingspan}</span></div>
+                <div class="flex justify-between"><span class="text-zinc-500">AĞIRLIK:</span> <span class="text-white">${weight}</span></div>
+                <div class="flex justify-between"><span class="text-zinc-500">UÇUŞ SÜRESİ:</span> <span class="text-white">${endurance}</span></div>
+                <div class="flex justify-between"><span class="text-zinc-500">SEYİR HIZI:</span> <span class="text-white">${speed}</span></div>
+            `;
+            const modal = document.getElementById('spec-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSpecModal() {
+            const modal = document.getElementById('spec-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function handleForm(e) {
+            e.preventDefault();
+            showToast('Mesajınız alındı. Teşekkür ederiz.');
+            e.target.reset();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+</html>
